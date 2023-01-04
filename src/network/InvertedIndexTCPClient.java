@@ -2,7 +2,6 @@ package network;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -59,7 +58,6 @@ public class InvertedIndexTCPClient {
                 System.out.println(String.format(DOCS_FOR_WORD_GETTING_START_MESSAGE, curWord));
                 serverDOS.writeUTF(curWord);
                 while ((curDocsForWordResponse = (String) serverOIS.readObject()) == null);
-                //curDocsForWordStringResult = new String(curDocsForWordByteResult);
                 resultsFileFW.write(String.format("%s : %s\n", curWord, curDocsForWordResponse));
                 System.out.println(String.format(DOCS_FOR_WORD_SUCCESSFUL_GET_MESSAGE, curWord, curWord, curDocsForWordResponse));
                 System.out.println();
