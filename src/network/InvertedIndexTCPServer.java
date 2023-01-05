@@ -1,6 +1,7 @@
 package network;
 
 import index.ParallelBoostedWordTextFileInvertedIndex;
+import index.SequentialWordTextFileInvertedIndex;
 import index.building.strategy.ParallelWordTextFileInvertedIndexBuildingStrategy;
 
 import java.io.*;
@@ -22,7 +23,7 @@ public class InvertedIndexTCPServer {
 
 
     private static final String DOCS_FOR_WORD_SUCCESSFUL_SENT_MESSAGE = "Documents which contain word %s were got and " +
-            "sent to the client successfully.\n";
+            "sent to the client %s successfully.\n";
 
     private static final String SERVER_SUCCESSFUL_FINISH_MESSAGE = "Document lists for all clients have been sent successfully.\n" +
             "Finishing work...";
@@ -52,8 +53,9 @@ public class InvertedIndexTCPServer {
             return;
         }
         ParallelBoostedWordTextFileInvertedIndex invertedIndex = new ParallelBoostedWordTextFileInvertedIndex();
+        //SequentialWordTextFileInvertedIndex invertedIndex = new SequentialWordTextFileInvertedIndex();
         long startTime = System.currentTimeMillis();
-        invertedIndex.build(new ParallelWordTextFileInvertedIndexBuildingStrategy(3), filesToIndexDirectoryPath);
+        invertedIndex.build(new ParallelWordTextFileInvertedIndexBuildingStrategy(4), filesToIndexDirectoryPath);
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - startTime));
         System.out.println(invertedIndex.getSourcesList("all").size());
         InvertedIndexTCPServer server = new InvertedIndexTCPServer(invertedIndex);
@@ -103,7 +105,8 @@ public class InvertedIndexTCPServer {
                     while ((curWord = clientDIS.readUTF()) == null);
                     String docListStringResponse = invertedIndex.getSourcesList(curWord).toString();
                     clientOOS.writeObject(docListStringResponse);
-                    System.out.println(String.format(DOCS_FOR_WORD_SUCCESSFUL_SENT_MESSAGE, curWord));
+                    System.out.println(String.format(DOCS_FOR_WORD_SUCCESSFUL_SENT_MESSAGE, curWord,
+                            clientConnectionSocket.getInetAddress() + ":" + clientConnectionSocket.getPort()));
                 }
             } catch (EOFException | SocketException e) { //end of data streams on client connection socket means closing of this socket from the client side
                 System.out.println(String.format(CLIENT_CONNECTION_FINISH_MESSAGE, clientConnectionSocket.getInetAddress() +
