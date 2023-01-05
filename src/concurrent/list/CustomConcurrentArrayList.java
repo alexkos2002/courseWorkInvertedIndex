@@ -98,4 +98,10 @@ public class CustomConcurrentArrayList<E> implements CustomConcurrentList<E> {
     public <T> T[] toArray(T[] a) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return list.size() > 0 ? "[" + (list.stream().map(element -> element.toString())
+                .reduce((accumulator, element) -> accumulator + ", " + element).get() + "]") : "[]";
+    }
 }

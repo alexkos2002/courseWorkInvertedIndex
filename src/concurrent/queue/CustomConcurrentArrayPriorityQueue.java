@@ -132,9 +132,9 @@ public class CustomConcurrentArrayPriorityQueue<E extends Comparable<E>> impleme
 
         @Override
         public String toString() {
-            return String.format("Priority Queue: %s",
+            return String.format("Priority Queue: (%s",
                     heap.size() > 0 ? (heap.stream().map(entry -> entry.toString())
-                            .reduce((accumulator, entry) -> accumulator + ", " + entry)).get() : "") ;
+                            .reduce((accumulator, entry) -> accumulator + ", " + entry)).get() + ")" : ")") ;
         }
 
     }
