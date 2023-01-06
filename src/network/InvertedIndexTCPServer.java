@@ -57,7 +57,6 @@ public class InvertedIndexTCPServer {
         long startTime = System.currentTimeMillis();
         invertedIndex.build(new ParallelWordTextFileInvertedIndexBuildingStrategy(4), filesToIndexDirectoryPath);
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - startTime));
-        System.out.println(invertedIndex.getSourcesList("all").size());
         InvertedIndexTCPServer server = new InvertedIndexTCPServer(invertedIndex);
         server.initAndStart();
     }
